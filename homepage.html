@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoTrack - Home</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">EcoTrack - Home page</div>
+            <button class="logout">Logout</button>
+        </nav>
+    </header>
+    
+    <section class="container">
+        <aside class="sidebar">
+            <ul>
+                <li><a href="meterread.html">Meter Readings</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="audit-report.html">Audit Report</a></li>
+                <li><a href="smart-recommendations.html">Smart Recommendations</a></li>
+                <li><a href="savingpotential.html">Saving Potential</a></li>
+            </ul>
+        </aside>
+        
+        <main class="content">
+            <h1>Welcome to EcoTrack</h1>
+            <p>Your smart energy efficiency companion. Monitor, analyze, and optimize your energy consumption with AI-driven insights.</p>
+            <img src="energy-saving.png" alt="Energy Saving Illustration">
+        </main>
+    </section>
+    
+    <footer>
+        <p>&copy; 2025 EcoTrack. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.querySelector(".logout").addEventListener("click", function() {
+            window.location.href = "login.html"; // Redirects to the login page
+        });
+    </script>
+</body>
+</html>

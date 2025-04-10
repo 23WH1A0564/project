@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .button {
+            display: block;
+            width: 90%;
+            margin: 10px auto;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .home-button { background: #3498db; }
+        .pdf-button { background: #e74c3c; }
+        .smart-button { background: #2ecc71; }
+        .chart-container {
+            width: 100%;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="homepage.html" class="button home-button">⬅ Back to Home</a>
+        <h1>Audit Report</h1>
+        <p>General power usage breakdown and AI-driven insights</p>
+        
+        <h2>Power Usage Breakdown</h2>
+        <div class="chart-container">
+            <canvas id="usageChart"></canvas>
+        </div>
+        
+        <h2>Industry Comparison</h2>
+        <div class="chart-container">
+            <canvas id="comparisonChart"></canvas>
+        </div>
+        
+        <h2>AI Analysis & Cost-Saving Tips</h2>
+        <p id="aiInsights">Loading insights...</p>
+        
+        <button onclick="downloadPDF()" class="button pdf-button">📥 Download Report as PDF</button>
+        <a href="smart-recommendations.html" class="button smart-button">💡 Go to Smart Recommendations</a>
+    </div>
+
+    <script>
+        const ctx1 = document.getElementById('usageChart').getContext('2d');
+        const usageChart = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                datasets: [{
+                    label: 'Power Usage (kWh)',
+                    data: [450, 400, 500, 480, 470],
+                    backgroundColor: 'rgba(52, 152, 219, 0.5)'
+                }]
+            }
+        });
+        
+        const ctx2 = document.getElementById('comparisonChart').getContext('2d');
+        const comparisonChart = new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: ['Your Usage', 'Industry Standard'],
+                datasets: [{
+                    data: [470, 400],
+                    backgroundColor: ['#e74c3c', '#2ecc71']
+                }]
+            }
+        });
+        
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text('Audit Report', 10, 10);
+            doc.text('Power Usage Breakdown:', 10, 20);
+            doc.text('AI Analysis: Reduce peak hours usage to save costs.', 10, 30);
+            doc.save('Audit_Report.pdf');
+        }
+    </script>
+</body>
+</html>
