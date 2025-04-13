@@ -1,45 +1,352 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoTrack - Home</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EcoTrack - Home</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #b2dfdb;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .logo {
+      font-size: 1.8em;
+      font-weight: bold;
+      color: #009688;
+    }
+
+    .logout {
+      background-color: #9c27b0;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .logout:hover {
+      background-color: #7b1fa2;
+    }
+
+    .welcome-text {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.5em;
+      font-style: italic;
+      color: #004d40;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .container {
+      display: flex;
+      flex: 1;
+      padding: 20px;
+    }
+
+    .sidebar {
+      background: linear-gradient(135deg, #26a69a, #00796b);
+      color: white;
+      width: 300px;
+      padding: 30px 20px;
+      border-top-right-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+
+    .sidebar h2 {
+      font-size: 1.6em;
+      color: white;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar li {
+      margin: 20px 0;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.1em;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background-color: rgba(255, 255, 255, 0.05);
+      transition: background 0.3s, transform 0.3s ease;
+    }
+
+    .sidebar a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+    }
+
+    .content {
+      flex: 1;
+      padding: 60px 20px;
+      background-color: #e0f2f1;
+      border-radius: 20px;
+      margin-left: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .content h1 {
+      font-size: 2.5em;
+      color: #004d40;
+    }
+
+    .content p {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #444;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta {
+      margin-top: 30px;
+      padding: 12px 28px;
+      background-color: #26a69a;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .cta:hover {
+      background-color: #1e857e;
+      transform: scale(1.05);
+    }
+
+    .flowchart {
+      margin: 40px auto 0;
+      text-align: center;
+    }
+
+    .flowchart h3 {
+      font-size: 1.8em;
+      color: #004d40;
+      margin-bottom: 20px;
+    }
+
+    .flow-step {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      padding: 20px;
+    }
+
+    .flow-box {
+      background-color: #ffffff;
+      padding: 15px 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      font-weight: bold;
+      color: #00796b;
+      width: 250px;
+    }
+
+    .arrow {
+      font-size: 1.5em;
+      color: #00796b;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background-color: #004d40;
+      color: white;
+      border-top: 4px solid #00796b;
+      border-radius: 0 0 20px 20px;
+    }
+
+    .how-it-works {
+      margin: 50px 20px;
+      background-color: #f7fafd;
+      padding: 40px;
+      border-radius: 20px;
+    }
+
+    .how-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 40px;
+    }
+
+    .how-text {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .how-text h2 {
+      font-size: 1.8em;
+      margin-bottom: 15px;
+      color: #004d40;
+    }
+
+    .how-text p {
+      font-size: 1.1em;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .how-steps {
+      flex: 1;
+      min-width: 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px 20px;
+      border-radius: 999px;
+      font-size: 1.1em;
+      font-weight: 600;
+      color: #333;
+      background-color: #ffffff;
+    }
+
+    .step i {
+      font-size: 1.3em;
+      color: white;
+      background-color: #888;
+      padding: 10px;
+      border-radius: 50%;
+    }
+
+    .step.purple { background-color: #ede7f6; }
+    .step.purple i { background-color: #7e57c2; }
+
+    .step.pink { background-color: #fce4ec; }
+    .step.pink i { background-color: #ec407a; }
+
+    .step.yellow { background-color: #fff8e1; }
+    .step.yellow i { background-color: #fbc02d; }
+
+    .step.teal { background-color: #e0f2f1; }
+    .step.teal i { background-color: #26a69a; }
+  </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">EcoTrack - Home page</div>
-            <button class="logout">Logout</button>
-        </nav>
-    </header>
-    
-    <section class="container">
-        <aside class="sidebar">
-            <ul>
-                <li><a href="meterread.html">Meter Readings</a></li>
-                <li><a href="dashboard.html">Dashboard</a></li>
-                <li><a href="audit-report.html">Audit Report</a></li>
-                <li><a href="smart-recommendations.html">Smart Recommendations</a></li>
-                <li><a href="savingpotential.html">Saving Potential</a></li>
-            </ul>
-        </aside>
-        
-        <main class="content">
-            <h1>Welcome to EcoTrack</h1>
-            <p>Your smart energy efficiency companion. Monitor, analyze, and optimize your energy consumption with AI-driven insights.</p>
-            <img src="energy-saving.png" alt="Energy Saving Illustration">
-        </main>
-    </section>
-    
-    <footer>
-        <p>&copy; 2025 EcoTrack. All Rights Reserved.</p>
-    </footer>
+  <header>
+    <div class="logo">EcoTrack</div>
+    <button class="logout">Logout</button>
+  </header>
 
-    <script>
-        document.querySelector(".logout").addEventListener("click", function() {
-            window.location.href = "login.html"; // Redirects to the login page
-        });
-    </script>
+  <div class="welcome-text">Welcome to EcoTrack</div>
+
+  <section class="container">
+    <aside class="sidebar">
+      <h2>Track Your Energy</h2>
+      <ul>
+        <li><a href="#"><i class="fas fa-bolt"></i>Meter Read<small>💡 Track your usage</small></a></li>
+        <li><a href="#"><i class="fas fa-tachometer-alt"></i>Dashboard<small>📊 Your energy summary</small></a></li>
+        <li><a href="#"><i class="fas fa-file-alt"></i>Audit Report<small>📑 Analyze your performance</small></a></li>
+        <li><a href="#"><i class="fas fa-lightbulb"></i>Smart Recommendations<small>💡 Optimize your usage</small></a></li>
+        <li><a href="#"><i class="fas fa-chart-line"></i>Saving Potential<small>💰 Discover how much you can save</small></a></li>
+      </ul>
+    </aside>
+
+    <main class="content">
+      <h1>Welcome to EcoTrack</h1>
+      <p>Your smart energy efficiency companion. Monitor, analyze, and optimize your energy consumption with AI-driven insights.</p>
+
+      <div class="flowchart">
+        <h3>Getting Your Readings</h3>
+        <div class="flow-step">
+          <div class="flow-box">1. Meter Read</div>
+          <div class="arrow">↓</div>
+          <div class="flow-box">2. Dashboard</div>
+          <div class="arrow">↓</div>
+          <div class="flow-box">3. Audit Report</div>
+          <div class="arrow">↓</div>
+          <div class="flow-box">4. Smart Recommendations</div>
+          <div class="arrow">↓</div>
+          <div class="flow-box">5. Saving Potential</div>
+        </div>
+      </div>
+
+      <button class="cta">Get Started</button>
+      <p style="font-size: 1.2em; margin-top: 20px; color: #004d40; font-weight: bold;">Saving Energy is Cool</p>
+      <img src="temp2.jpg" alt="Illustration of energy saving" style="margin-top: 30px; max-width: 400px; width: 100%; border-radius: 12px;" />
+    </main>
+  </section>
+
+  <section class="how-it-works">
+    <div class="how-container">
+      <div class="how-text">
+        <h2>How It Works</h2>
+        <p>At EcoTrack, we blend intuitive software with our streamlined "4-Gets" process to help you improve sustainability, reduce costs, and save time.</p>
+        <p>At ECOTRACK, we never 4-GET.</p>
+      </div>
+      <div class="how-steps">
+        <div class="step purple">
+          <i class="fas fa-chart-pie"></i><span>1. Get Data</span>
+        </div>
+        <div class="step pink">
+          <i class="fas fa-search"></i><span>2. Get Insights</span>
+        </div>
+        <div class="step yellow">
+          <i class="fas fa-rocket"></i><span>3. Get Actions</span>
+        </div>
+        <div class="step teal">
+          <i class="fas fa-trophy"></i><span>4. Get Results</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; Experience smart energy efficiency — redefined and customized for EcoTrack.</p>
+  </footer>
+
+  <script>
+    document.querySelector(".logout").addEventListener("click", function () {
+      window.location.href = "login.html";
+    });
+  </script>
 </body>
 </html>

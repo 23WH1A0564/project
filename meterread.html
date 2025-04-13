@@ -8,23 +8,59 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #4c669f, #3b5998, #192f6a);
+            background-color: #73cdb6; /* Light green background */
             color: white;
             margin: 0;
             padding: 0;
             text-align: center;
         }
         .container {
-            max-width: 600px;
+            max-width: 1000px;
             margin: 30px auto;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(185, 108, 108, 0.1);
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
         header h1 {
-            font-size: 24px;
+            font-size: 32px;
             margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .nav-button {
+            background: #2980b9;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .nav-button:hover {
+            background: #1c5980;
+        }
+        /* New class for login button */
+        .nav a.login {
+            background-color: #5f8f81; /* Light green color */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .nav a.login:hover {
+            background-color: #c9d1cf; /* Slightly darker shade for hover */
         }
         .section {
             margin-top: 20px;
@@ -44,13 +80,13 @@
             color: black;
         }
         button {
-            background: #2ecc71;
+            background: #27276d;
             color: white;
             font-size: 16px;
             cursor: pointer;
         }
         button:hover {
-            background: #27ae60;
+            background: #40246e;
         }
         ul {
             list-style: none;
@@ -63,9 +99,17 @@
             border-radius: 5px;
             text-align: left;
         }
+        .input-chart-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .input-area, .chart-container {
+            flex: 1;
+            min-width: 300px;
+        }
         .chart-container {
-            position: relative;
-            width: 100%;
             height: 300px;
         }
         canvas {
@@ -77,7 +121,7 @@
             width: 95%;
             padding: 12px;
             font-size: 18px;
-            background: #3498db;
+            background: #515ada;
             border: none;
             color: white;
             cursor: pointer;
@@ -86,7 +130,18 @@
             display: inline-block;
         }
         .audit-button:hover {
-            background: #2980b9;
+            background: #ca6f1e;
+        }
+        
+        /* Dark colored box for the title */
+        .title-box {
+            background-color: #1c5b59; /* Dark color */
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            display: inline-block;
+            font-size: 32px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -94,23 +149,37 @@
 
     <div class="container">
         <header>
-            <h1>⚡ Utility Meter Tracker</h1>
+            <div class="title-box">⚡ Utility Meter Tracker</div>
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-button">🏠 Home</a>
+                <a href="logout.html" class="nav-button">🚪 Logout</a>
+            </div>
         </header>
 
-        <section class="section">
-            <h2>Enter Meter Reading</h2>
-            <input type="number" id="readingInput" placeholder="Enter reading..." required>
-            <input type="number" id="rateInput" placeholder="Rate per kWh..." required>
-            <input type="text" id="noteInput" placeholder="Enter notes (optional)">
-            <button onclick="addReading()">Submit</button>
-        </section>
+        <div class="section input-chart-container">
+            <div class="input-area">
+                <h2>Enter Meter Reading</h2>
+                <input type="number" id="readingInput" placeholder="Enter reading..." required>
+                <input type="number" id="rateInput" placeholder="Rate per kWh..." required>
+                <input type="text" id="noteInput" placeholder="Enter notes (optional)">
+                
+                <!-- Added From and To date labels and time input -->
+                <label for="dateFrom">Date From:</label>
+                <input type="date" id="dateFrom" required>
+                <input type="time" id="timeFrom" required>
 
-        <section class="section">
-            <h2>Usage Trend</h2>
+                <label for="dateTo">Date To:</label>
+                <input type="date" id="dateTo" required>
+                <input type="time" id="timeTo" required>
+
+                <button onclick="addReading()">Submit</button>
+            </div>
+
             <div class="chart-container">
+                <h2>Usage Trend</h2>
                 <canvas id="usageChart"></canvas>
             </div>
-        </section>
+        </div>
 
         <section class="section">
             <h2>Reading History</h2>
@@ -128,20 +197,22 @@
             const readingInput = document.getElementById('readingInput').value;
             const rateInput = document.getElementById('rateInput').value;
             const noteInput = document.getElementById('noteInput').value;
+            const dateFrom = document.getElementById('dateFrom').value;
+            const timeFrom = document.getElementById('timeFrom').value;
+            const dateTo = document.getElementById('dateTo').value;
+            const timeTo = document.getElementById('timeTo').value;
 
-            if (!readingInput || !rateInput) {
-                alert('Please enter both a meter reading and rate per kWh!');
+            if (!readingInput || !rateInput || !dateFrom || !timeFrom || !dateTo || !timeTo) {
+                alert('Please fill all the fields, including date and time!');
                 return;
             }
 
-            const now = new Date();
-            const options = { day: '2-digit', month: 'short', year: 'numeric', weekday: 'long' };
-            const formattedDate = now.toLocaleDateString('en-US', options);
+            let displayDate = `${dateFrom} ${timeFrom} to ${dateTo} ${timeTo}`;
 
             const cost = (parseFloat(readingInput) * parseFloat(rateInput)).toFixed(2);
-            
+
             const newReading = {
-                date: formattedDate,
+                date: displayDate,
                 reading: parseFloat(readingInput),
                 rate: parseFloat(rateInput),
                 cost: cost,
@@ -161,10 +232,9 @@
                 historyList.innerHTML = 'No readings added yet.';
                 return;
             }
-
             readings.slice().reverse().forEach((reading) => {
                 const listItem = document.createElement('li');
-                listItem.innerHTML = `<strong>${reading.date}</strong>: ${reading.reading} kWh at $${reading.rate}/kWh - Total: $${reading.cost} - ${reading.notes}`;
+                listItem.innerHTML = `<strong>${reading.date}</strong>: ${reading.reading} kWh at ₹${reading.rate}/kWh - Total: ₹${reading.cost} - ${reading.notes}`;
                 historyList.appendChild(listItem);
             });
         }

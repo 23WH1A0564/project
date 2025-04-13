@@ -9,19 +9,19 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f4f4f4;
+            background: #b0e0db; /* soft mint green from the image */
             color: #333;
             text-align: center;
             margin: 0;
             padding: 20px;
         }
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: auto;
-            background: white;
+            background: #ffffff;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
         }
         .button {
             display: block;
@@ -32,42 +32,120 @@
             border: none;
             color: white;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 6px;
             text-decoration: none;
         }
         .home-button { background: #3498db; }
         .pdf-button { background: #e74c3c; }
-        .smart-button { background: #2ecc71; }
+        .smart-button { background: #9b59b6; }
+        .logout-button { 
+            background: #f39c12;
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
         .chart-container {
             width: 100%;
             height: 300px;
+            margin-bottom: 20px;
+        }
+
+        .industry-info {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            background-color: #d8fef2;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .industry-text {
+            max-width: 400px;
+            text-align: left;
+            color: #333;
+            font-size: 15px;
+        }
+
+        .ai-insights-box {
+            background-color: #fef9e7;
+            border-left: 6px solid #f1c40f;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: left;
+            max-width: 700px;
+            margin: 0 auto 20px auto;
+        }
+
+        h1, h2 {
+            color: #2c3e50;
         }
     </style>
 </head>
 <body>
+    <button class="logout-button" onclick="logout()">Logout</button>
     <div class="container">
         <a href="homepage.html" class="button home-button">⬅ Back to Home</a>
-        <h1>Audit Report</h1>
+        <h1>*** AUDIT REPORT ***</h1>
         <p>General power usage breakdown and AI-driven insights</p>
-        
+
         <h2>Power Usage Breakdown</h2>
         <div class="chart-container">
             <canvas id="usageChart"></canvas>
         </div>
-        
+
         <h2>Industry Comparison</h2>
-        <div class="chart-container">
-            <canvas id="comparisonChart"></canvas>
+        <div class="industry-info">
+            <div class="chart-container" style="width: 300px;">
+                <canvas id="comparisonChart"></canvas>
+            </div>
+            <div class="industry-text">
+                <h3>Understanding the Comparison</h3>
+                <p>Your organization's energy usage is compared with industry averages. If your usage is higher, consider reviewing peak time consumption and implementing energy-efficient devices or scheduling.</p>
+            </div>
         </div>
-        
+
         <h2>AI Analysis & Cost-Saving Tips</h2>
-        <p id="aiInsights">Loading insights...</p>
-        
+        <div class="ai-insights-box" id="aiInsights">
+            <strong>AI Suggestion:</strong><br>
+            <!-- Dynamic AI Insights will go here -->
+            <p id="dynamicInsights">Your energy usage is higher than industry standards during peak hours.<br>
+            <ul>
+                <li>Reschedule non-critical operations to off-peak hours.</li>
+                <li>Use smart thermostats and motion-sensor lighting.</li>
+                <li>Invest in energy-efficient equipment where possible.</li>
+            </ul></p>
+        </div>
+
         <button onclick="downloadPDF()" class="button pdf-button">📥 Download Report as PDF</button>
         <a href="smart-recommendations.html" class="button smart-button">💡 Go to Smart Recommendations</a>
     </div>
 
     <script>
+        // Assume we have a dynamic user name stored in a variable
+        const userName = "Amulya"; // This could come from session data or a login process
+
+        // Personalize the AI Insights with the user's name (only once)
+        const dynamicInsights = document.getElementById('dynamicInsights');
+        if (!dynamicInsights.innerHTML.includes(userName)) {
+            dynamicInsights.innerHTML = `
+                <strong>AI Suggestion:</strong><br>
+                Hello ${userName}, your energy usage is higher than industry standards during peak hours.<br>
+                <ul>
+                    <li>Reschedule non-critical operations to off-peak hours.</li>
+                    <li>Use smart thermostats and motion-sensor lighting.</li>
+                    <li>Invest in energy-efficient equipment where possible.</li>
+                </ul>
+            `;
+        }
+
+        // Generate charts (as before)
         const ctx1 = document.getElementById('usageChart').getContext('2d');
         const usageChart = new Chart(ctx1, {
             type: 'bar',
@@ -76,11 +154,11 @@
                 datasets: [{
                     label: 'Power Usage (kWh)',
                     data: [450, 400, 500, 480, 470],
-                    backgroundColor: 'rgba(52, 152, 219, 0.5)'
+                    backgroundColor: 'rgba(52, 152, 219, 0.6)'
                 }]
             }
         });
-        
+
         const ctx2 = document.getElementById('comparisonChart').getContext('2d');
         const comparisonChart = new Chart(ctx2, {
             type: 'pie',
@@ -92,14 +170,20 @@
                 }]
             }
         });
-        
+
         function downloadPDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             doc.text('Audit Report', 10, 10);
             doc.text('Power Usage Breakdown:', 10, 20);
-            doc.text('AI Analysis: Reduce peak hours usage to save costs.', 10, 30);
+            doc.text('AI Analysis: Reduce peak hour usage. Use smart devices.', 10, 30);
             doc.save('Audit_Report.pdf');
+        }
+
+        // Logout function
+        function logout() {
+            // Clear user session or token here
+            window.location.href = 'login.html'; // Redirect to login page
         }
     </script>
 </body>
