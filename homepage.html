@@ -85,32 +85,56 @@
       color: white;
       margin-bottom: 20px;
       font-weight: bold;
+      text-align: center;
     }
 
-    .sidebar ul {
+    .flowchart-nav ul {
+      padding-left: 0;
+    }
+
+    .flowchart-nav li {
       list-style: none;
-    }
-
-    .sidebar li {
-      margin: 20px 0;
-    }
-
-    .sidebar a {
-      color: white;
-      text-decoration: none;
-      font-size: 1.1em;
+      margin-bottom: 10px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      padding: 12px 16px;
-      border-radius: 12px;
-      background-color: rgba(255, 255, 255, 0.05);
-      transition: background 0.3s, transform 0.3s ease;
+      align-items: center;
     }
 
-    .sidebar a:hover {
-      background-color: rgba(255, 255, 255, 0.2);
+    .flowchart-nav a {
+      text-decoration: none;
+      color: #333;
+      display: flex;
+      align-items: center;
+      background-color: white;
+      color: #00796b;
+      padding: 12px 18px;
+      width: 100%;
+      border-radius: 10px;
+      font-weight: bold;
+      justify-content: center;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .flowchart-nav a:hover {
+      background-color: #b2dfdb;
       transform: scale(1.05);
+    }
+
+    .flowchart-nav i {
+      margin-right: 8px;
+      font-size: 1.2em;
+    }
+
+    .flowchart-nav small {
+      color: #777;
+      margin-left: 5px;
+      font-weight: normal;
+    }
+
+    .arrow-down {
+      font-size: 1.5em;
+      color: white;
+      margin: 5px 0;
     }
 
     .content {
@@ -125,19 +149,27 @@
     .content h1 {
       font-size: 2.5em;
       color: #004d40;
+      text-align: center;
+    }
+    .flow-img img {
+  width: 300px; /* You can adjust this value to be smaller or larger */
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+    .flow-img {
+      display: flex;
+      justify-content: center;
+      margin-top: 40px;
     }
 
-    .content p {
-      margin-top: 20px;
-      font-size: 1.2em;
-      color: #444;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
+  
 
     .cta {
-      margin-top: 30px;
+      display: block;
+      margin: 40px auto 10px;
       padding: 12px 28px;
       background-color: #26a69a;
       color: white;
@@ -153,40 +185,56 @@
       transform: scale(1.05);
     }
 
-    .flowchart {
-      margin: 40px auto 0;
+    .how-section {
+      margin-top: 60px;
+      padding: 30px;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
       text-align: center;
     }
 
-    .flowchart h3 {
-      font-size: 1.8em;
-      color: #004d40;
+    .how-section p {
+      font-size: 1.4em;
+      color: #00796b;
+      font-weight: bold;
       margin-bottom: 20px;
     }
 
-    .flow-step {
+    .how-steps {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+
+    .step {
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      gap: 15px;
       padding: 20px;
-    }
-
-    .flow-box {
-      background-color: #ffffff;
-      padding: 15px 25px;
       border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 150px;
+      margin: 10px;
+      color: white;
       font-weight: bold;
-      color: #00796b;
-      width: 250px;
+      font-size: 1em;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
     }
 
-    .arrow {
-      font-size: 1.5em;
-      color: #00796b;
+    .step:hover {
+      transform: translateY(-5px);
     }
+
+    .step i {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    .purple { background-color: #7e57c2; }
+    .pink { background-color: #ec407a; }
+    .yellow { background-color: #fbc02d; color: black; }
+    .teal { background-color: #26a69a; }
 
     footer {
       text-align: center;
@@ -195,79 +243,29 @@
       color: white;
       border-top: 4px solid #00796b;
       border-radius: 0 0 20px 20px;
+      margin-top: 40px;
     }
 
-    .how-it-works {
-      margin: 50px 20px;
-      background-color: #f7fafd;
-      padding: 40px;
-      border-radius: 20px;
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        border-radius: 0 0 20px 20px;
+        margin-bottom: 20px;
+      }
+
+      .content {
+        margin-left: 0;
+      }
+
+      .how-steps {
+        flex-direction: column;
+        align-items: center;
+      }
     }
-
-    .how-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 40px;
-    }
-
-    .how-text {
-      flex: 1;
-      min-width: 280px;
-    }
-
-    .how-text h2 {
-      font-size: 1.8em;
-      margin-bottom: 15px;
-      color: #004d40;
-    }
-
-    .how-text p {
-      font-size: 1.1em;
-      color: #333;
-      line-height: 1.6;
-    }
-
-    .how-steps {
-      flex: 1;
-      min-width: 280px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .step {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      padding: 15px 20px;
-      border-radius: 999px;
-      font-size: 1.1em;
-      font-weight: 600;
-      color: #333;
-      background-color: #ffffff;
-    }
-
-    .step i {
-      font-size: 1.3em;
-      color: white;
-      background-color: #888;
-      padding: 10px;
-      border-radius: 50%;
-    }
-
-    .step.purple { background-color: #ede7f6; }
-    .step.purple i { background-color: #7e57c2; }
-
-    .step.pink { background-color: #fce4ec; }
-    .step.pink i { background-color: #ec407a; }
-
-    .step.yellow { background-color: #fff8e1; }
-    .step.yellow i { background-color: #fbc02d; }
-
-    .step.teal { background-color: #e0f2f1; }
-    .step.teal i { background-color: #26a69a; }
   </style>
 </head>
 <body>
@@ -280,72 +278,59 @@
 
   <section class="container">
     <aside class="sidebar">
-      <h2>Track Your Energy</h2>
-      <ul>
-        <li>
-          <a href="meterread.html"><i class="fas fa-bolt"></i>Meter Read<small>💡 Track your usage</small></a>
-        </li>
-        <li>
-          <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i>Dashboard<small>📊 Your energy summary</small></a>
-        </li>
-        <li>
-          <a href="audit-report.html"><i class="fas fa-file-alt"></i>Audit Report<small>📑 Analyze your performance</small></a>
-        </li>
-        <li>
-          <a href="smart-recommendations.html"><i class="fas fa-lightbulb"></i>Smart Recommendations<small>💡 Optimize your usage</small></a>
-        </li>
-        <li>
-          <a href="savingpotential.html"><i class="fas fa-chart-line"></i>Saving Potential<small>💰 Discover how much you can save</small></a>
-        </li>
-      </ul>
-    </aside>  
-    <main class="content">
-      <h1>Welcome to EcoTrack</h1>
-      <p>Your smart energy efficiency companion. Monitor, analyze, and optimize your energy consumption with AI-driven insights.</p>
+      <h2>Trace Your Audit</h2>
+      <div class="flowchart-nav">
+        <ul>
+          <li>
+            <a href="meterread.html"><i class="fas fa-bolt"></i>Meter Read<small>💡 Track your usage</small></a>
+            <span class="arrow-down">↓</span>
+          </li>
+          <li>
+            <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i>Dashboard<small>📊 Your energy summary</small></a>
+            <span class="arrow-down">↓</span>
+          </li>
+          <li>
+            <a href="audit-report.html"><i class="fas fa-file-alt"></i>Audit Report<small>📑 Analyze your performance</small></a>
+            <span class="arrow-down">↓</span>
+          </li>
+          <li>
+            <a href="smart-recommendations.html"><i class="fas fa-lightbulb"></i>Smart Recommendations<small>💡 Optimize your usage</small></a>
+            <span class="arrow-down">↓</span>
+          </li>
+          <li>
+            <a href="savingpotential.html"><i class="fas fa-chart-line"></i>Saving Potential<small>💰 Discover how much you can save</small></a>
+          </li>
+        </ul>
+      </div>
+    </aside>
 
-      <div class="flowchart">
-        <h3>Getting Your Readings</h3>
-        <div class="flow-step">
-          <div class="flow-box">1. Meter Read</div>
-          <div class="arrow">↓</div>
-          <div class="flow-box">2. Dashboard</div>
-          <div class="arrow">↓</div>
-          <div class="flow-box">3. Audit Report</div>
-          <div class="arrow">↓</div>
-          <div class="flow-box">4. Smart Recommendations</div>
-          <div class="arrow">↓</div>
-          <div class="flow-box">5. Saving Potential</div>
-        </div>
+    <main class="content">
+      <h1>Track Your Energy Flow</h1>
+      <div class="flow-img">
+        <img src="temp2.jpg" alt="Illustration of energy saving" />
       </div>
 
       <button class="cta">Get Started</button>
-      <p style="font-size: 1.2em; margin-top: 20px; color: #004d40; font-weight: bold;">Saving Energy is Cool</p>
-      <img src="temp2.jpg" alt="Illustration of energy saving" style="margin-top: 30px; max-width: 400px; width: 100%; border-radius: 12px;" />
-    </main>
-  </section>
+      <p style="font-size: 1.2em; text-align: center; margin-top: 20px; color: #004d40; font-weight: bold;">Saving Energy is Cool</p>
 
-  <section class="how-it-works">
-    <div class="how-container">
-      <div class="how-text">
-        <h2>How It Works</h2>
-        <p>At EcoTrack, we blend intuitive software with our streamlined "4-Gets" process to help you improve sustainability, reduce costs, and save time.</p>
+      <div class="how-section">
         <p>At ECOTRACK, we never 4-GET.</p>
+        <div class="how-steps">
+          <div class="step purple">
+            <i class="fas fa-chart-pie"></i><span>1. Get Data</span>
+          </div>
+          <div class="step pink">
+            <i class="fas fa-search"></i><span>2. Get Insights</span>
+          </div>
+          <div class="step yellow">
+            <i class="fas fa-rocket"></i><span>3. Get Actions</span>
+          </div>
+          <div class="step teal">
+            <i class="fas fa-trophy"></i><span>4. Get Results</span>
+          </div>
+        </div>
       </div>
-      <div class="how-steps">
-        <div class="step purple">
-          <i class="fas fa-chart-pie"></i><span>1. Get Data</span>
-        </div>
-        <div class="step pink">
-          <i class="fas fa-search"></i><span>2. Get Insights</span>
-        </div>
-        <div class="step yellow">
-          <i class="fas fa-rocket"></i><span>3. Get Actions</span>
-        </div>
-        <div class="step teal">
-          <i class="fas fa-trophy"></i><span>4. Get Results</span>
-        </div>
-      </div>
-    </div>
+    </main>
   </section>
 
   <footer>
