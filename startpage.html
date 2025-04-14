@@ -14,7 +14,7 @@
     }
 
     body {
-      background: #a0d8d3; /* Darker Green Background */
+      background: #a0d8d3;
       color: #333;
     }
 
@@ -75,6 +75,13 @@
 
     .highlight {
       color: #00c1a0;
+    }
+
+    .highlight-box {
+      background-color: #a0f0dc;
+      padding: 4px 8px;
+      border-radius: 8px;
+      display: inline-block;
     }
 
     .hero img {
@@ -172,12 +179,13 @@
       <a href="signup.html" class="signup">Try It</a>
     </nav>
   </header>
+
   <section class="hero">
     <div class="hero-text">
       <h1>
         Make Better<br>
-        <span style="background-color: #a0f0dc; padding: 4px 8px; border-radius: 8px;"> 
-          <span id="changingWord" style="background-color: #a0f0dc; padding: 4px 8px; border-radius: 8px;"></span>
+        <span class="highlight-box">
+          <span id="changingWord"></span>
         </span><br>
         Decisions
       </h1>
@@ -194,67 +202,66 @@
       </div>
     </div>
 
-    
     <div style="flex: 1; padding-left: 40px;">
       <img src="temp1.jpg" alt="Platform Preview"
            style="width: 100%; height: auto; aspect-ratio: 16/10; object-fit: cover; border-radius: 12px;">
     </div>
   </section>
 
-  <!-- JavaScript for rotating words -->
+  <!-- Rotating words script -->
   <script>
     const words = ["Sustainable", "Carbon", "Energy", "Resource", "Efficiency", "Environmental", "Green"];
     let i = 0;
+    const changingWordEl = document.getElementById("changingWord");
+    changingWordEl.textContent = words[0];
     setInterval(() => {
       i = (i + 1) % words.length;
-      document.getElementById("changingWord").textContent = words[i];
+      changingWordEl.textContent = words[i];
     }, 2000);
   </script>
 
- 
-<!-- In the features section -->
-<section class="features">
-  <div class="feature">
-    <img src="sustain.jpeg" alt="Sustainability Icon">
-    <h3>Improve Sustainability</h3>
-  </div>
-  <div class="feature">
-    <img src="time.jpeg" alt="Time Icon">
-    <h3>Save Time</h3>
-  </div>
-  <div class="feature">
-    <img src="compilance.jpeg" alt="Compliance Icon">
-    <h3>Meet Compliance</h3>
-  </div>
-  <div class="feature">
-    <img src="cost.jpeg" alt="Cost Icon">
-    <h3>Reduce Costs</h3>
-  </div>
-</section>
-
-<!-- In the modules section -->
-<section class="modules">
-  <h2>Some Of Our Key Features And Modules</h2>
-  <div class="modules-content">
-    <div>
-      <p>
-        WattTrack helps you make smarter energy decisions using your meter readings, bills, and sustainability data. We visualize trends, compare with industry standards, and suggest AI-powered savings insights.
-      </p>
+  <!-- Features Section -->
+  <section class="features">
+    <div class="feature">
+      <img src="sustain.jpeg" alt="Sustainability Icon">
+      <h3>Improve Sustainability</h3>
     </div>
-    <img src="eneff.png" alt="Insights Graphic" />
-  </div>
-  <div class="modules-content">
-    <img src="cf2.png" alt="Carbon Footprint Image" />
-    <div>
-      <p>
-        Understanding and tracking your carbon footprint is crucial in today’s world. Our platform allows you to monitor emissions, generate sustainability reports, and identify opportunities to go greener.
-      </p>
+    <div class="feature">
+      <img src="time.jpeg" alt="Time Icon">
+      <h3>Save Time</h3>
     </div>
-  </div>
-</section>
+    <div class="feature">
+      <img src="compilance.jpeg" alt="Compliance Icon">
+      <h3>Meet Compliance</h3>
+    </div>
+    <div class="feature">
+      <img src="cost.jpeg" alt="Cost Icon">
+      <h3>Reduce Costs</h3>
+    </div>
+  </section>
 
+  <!-- Modules Section -->
+  <section class="modules">
+    <h2>Some Of Our Key Features And Modules</h2>
+    <div class="modules-content">
+      <div>
+        <p>
+          WattTrack helps you make smarter energy decisions using your meter readings, bills, and sustainability data. We visualize trends, compare with industry standards, and suggest AI-powered savings insights.
+        </p>
+      </div>
+      <img src="eneff.png" alt="Insights Graphic" />
+    </div>
+    <div class="modules-content">
+      <img src="cf2.png" alt="Carbon Footprint Image" />
+      <div>
+        <p>
+          Understanding and tracking your carbon footprint is crucial in today’s world. Our platform allows you to monitor emissions, generate sustainability reports, and identify opportunities to go greener.
+        </p>
+      </div>
+    </div>
+  </section>
 
-
+  <!-- Testimonials -->
   <section class="testimonials">
     <h2>What Some Of Our Customers Are Saying</h2>
     <div class="testimonial-group">
@@ -263,14 +270,5 @@
       <div class="testimonial">"The experience has been very positive overall."</div>
     </div>
   </section>
-
-  <script>
-    const words = ["Carbon", "Energy", "Resource", "Efficiency", "Sustainable", "Environmental", "Green"];
-    let i = 0;
-    setInterval(() => {
-      i = (i + 1) % words.length;
-      document.getElementById("changingWord").textContent = words[i];
-    }, 2000);
-  </script>
 </body>
-</html> 
+</html>
