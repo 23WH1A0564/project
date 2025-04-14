@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audit Report</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #b0e0db; /* soft mint green from the image */
+            background: #b0e0db;
             color: #333;
             text-align: center;
             margin: 0;
@@ -36,7 +35,6 @@
             text-decoration: none;
         }
         .home-button { background: #3498db; }
-        .pdf-button { background: #e74c3c; }
         .smart-button { background: #9b59b6; }
         .logout-button { 
             background: #f39c12;
@@ -48,13 +46,11 @@
             cursor: pointer;
             border-radius: 6px;
         }
-
         .chart-container {
             width: 100%;
             height: 300px;
             margin-bottom: 20px;
         }
-
         .industry-info {
             display: flex;
             justify-content: space-around;
@@ -65,14 +61,12 @@
             padding: 15px;
             margin-bottom: 20px;
         }
-
         .industry-text {
             max-width: 400px;
             text-align: left;
             color: #333;
             font-size: 15px;
         }
-
         .ai-insights-box {
             background-color: #fef9e7;
             border-left: 6px solid #f1c40f;
@@ -82,7 +76,6 @@
             max-width: 700px;
             margin: 0 auto 20px auto;
         }
-
         h1, h2 {
             color: #2c3e50;
         }
@@ -114,75 +107,99 @@
         <h2>AI Analysis & Cost-Saving Tips</h2>
         <div class="ai-insights-box" id="aiInsights">
             <strong>AI Suggestion:</strong><br>
-            <!-- Dynamic AI Insights will go here -->
-            <p id="dynamicInsights">Your energy usage is higher than industry standards during peak hours.<br>
-            <ul>
-                <li>Reschedule non-critical operations to off-peak hours.</li>
-                <li>Use smart thermostats and motion-sensor lighting.</li>
-                <li>Invest in energy-efficient equipment where possible.</li>
-            </ul></p>
+            <p id="dynamicInsights"></p>
         </div>
 
-        <button onclick="downloadPDF()" class="button pdf-button">📥 Download Report as PDF</button>
         <a href="smart-recommendations.html" class="button smart-button">💡 Go to Smart Recommendations</a>
+
+        <!-- ChatGPT Learn More Button -->
+        <a href="https://chat.openai.com/chat" target="_blank" class="button" style="background-color: #f39c12;">💬 Learn More About Energy Efficiency & Cost Saving Tips</a>
     </div>
 
     <script>
-        // Assume we have a dynamic user name stored in a variable
-        const userName = "Amulya"; // This could come from session data or a login process
+        const userName = "Amulya"; // Dynamic name placeholder
 
-        // Personalize the AI Insights with the user's name (only once)
-        const dynamicInsights = document.getElementById('dynamicInsights');
-        if (!dynamicInsights.innerHTML.includes(userName)) {
-            dynamicInsights.innerHTML = `
-                <strong>AI Suggestion:</strong><br>
-                Hello ${userName}, your energy usage is higher than industry standards during peak hours.<br>
-                <ul>
-                    <li>Reschedule non-critical operations to off-peak hours.</li>
-                    <li>Use smart thermostats and motion-sensor lighting.</li>
-                    <li>Invest in energy-efficient equipment where possible.</li>
-                </ul>
-            `;
-        }
+        const readings = JSON.parse(localStorage.getItem('meterReadings')) || {};
+        const userEmail = JSON.parse(localStorage.getItem('loggedInUser'))?.email;
+        const userReadings = readings[userEmail] || [];
 
-        // Generate charts (as before)
+        const totalUsage = userReadings.reduce((acc, reading) => acc + reading.reading, 0);
+        const averageUsage = totalUsage / userReadings.length;
+
+        const months = userReadings.map(reading => reading.date.split(' ')[0]);
+        const usageData = userReadings.map(reading => reading.reading);
+
+        // Generate Power Usage Breakdown chart
         const ctx1 = document.getElementById('usageChart').getContext('2d');
         const usageChart = new Chart(ctx1, {
             type: 'bar',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                labels: months,
                 datasets: [{
                     label: 'Power Usage (kWh)',
-                    data: [450, 400, 500, 480, 470],
+                    data: usageData,
                     backgroundColor: 'rgba(52, 152, 219, 0.6)'
                 }]
             }
         });
 
+        // Generate Industry Comparison chart
+        const industryStandard = 400;
         const ctx2 = document.getElementById('comparisonChart').getContext('2d');
         const comparisonChart = new Chart(ctx2, {
             type: 'pie',
             data: {
                 labels: ['Your Usage', 'Industry Standard'],
                 datasets: [{
-                    data: [470, 400],
+                    data: [averageUsage, industryStandard],
                     backgroundColor: ['#e74c3c', '#2ecc71']
                 }]
             }
         });
 
-        function downloadPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.text('Audit Report', 10, 10);
-            doc.text('Power Usage Breakdown:', 10, 20);
-            doc.text('AI Analysis: Reduce peak hour usage. Use smart devices.', 10, 30);
-            doc.save('Audit_Report.pdf');
+        function getUsageRangeTips(usage) {
+            if (usage < 400) {
+                return {
+                    message: "Your energy usage is low compared to industry standards.",
+                    tips: [
+                        'Continue using energy-efficient devices.',
+                        'Maintain low consumption patterns to optimize cost savings.',
+                        'Consider investing in renewable energy options.'
+                    ]
+                };
+            } else if (usage <= 500) {
+                return {
+                    message: "Your energy usage is within industry standards.",
+                    tips: [
+                        'Consider upgrading to more energy-efficient appliances.',
+                        'Reschedule non-essential operations to off-peak hours.',
+                        'Monitor your usage regularly to stay on track.'
+                    ]
+                };
+            } else {
+                return {
+                    message: "Your energy usage is above industry standards.",
+                    tips: [
+                        'Reschedule non-critical operations to off-peak hours.',
+                        'Use smart thermostats and motion-sensor lighting.',
+                        'Invest in energy-efficient equipment and lighting.'
+                    ]
+                };
+            }
         }
 
-        // Logout function
+        const { message, tips } = getUsageRangeTips(averageUsage);
+
+        const dynamicInsights = document.getElementById('dynamicInsights');
+        dynamicInsights.innerHTML = `
+            <strong>AI Suggestion:</strong><br>
+            ${message}<br>
+            <ul>
+                ${tips.map(tip => `<li>${tip}</li>`).join('')}
+            </ul>
+        `;
+
         function logout() {
-            // Clear user session or token here
             window.location.href = 'login.html'; // Redirect to login page
         }
     </script>

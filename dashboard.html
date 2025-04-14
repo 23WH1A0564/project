@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -169,36 +170,36 @@
 <body>
   <div class="dashboard">
     <div class="top-bar">
-      <a href="homepage.html" class="back-btn">← Back to Home</a>
+      <a href="index.html" class="back-btn">← Back to Home</a>
       <h2>Energy Dashboard</h2>
     </div>
 
     <div class="time-filter">
-      <button class="active">Week</button>
-      <button>Month</button>
-      <button>Year</button>
+      <button class="active" onclick="filterBy('week')">Week</button>
+      <button onclick="filterBy('month')">Month</button>
+      <button onclick="filterBy('year')">Year</button>
     </div>
 
     <div class="efficiency-score">
-      <span>85</span>
+      <span id="efficiencyScore">0</span>
       <p>Efficiency Score</p>
     </div>
 
     <div class="metrics">
       <div class="metric">
         <p>Total Usage</p>
-        <h3>2,456 kWh</h3>
-        <span class="positive">+2.3%</span>
+        <h3 id="totalUsage">0 kWh</h3>
+        <span id="usageTrend" class="positive">+0%</span>
       </div>
       <div class="metric">
         <p>Carbon Footprint</p>
-        <h3>1.2 tons</h3>
-        <span class="negative">-5.1%</span>
+        <h3 id="carbonFootprint">0 tons</h3>
+        <span class="negative">↓</span>
       </div>
       <div class="metric">
         <p>Cost Savings</p>
-        <h3>$345.20</h3>
-        <span class="positive">+12.5%</span>
+        <h3 id="costSavings">$0.00</h3>
+        <span id="savingsTrend" class="positive">+0%</span>
       </div>
     </div>
 
@@ -218,34 +219,85 @@
   </div>
 
   <script>
-    const ctx = document.getElementById("energyChart").getContext("2d");
+    let chart;
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    const email = user?.email;
 
-    new Chart(ctx, {
-      type: "line",
-      data: {
-        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-        datasets: [{
-          label: "Energy Consumption (kWh)",
-          data: [55, 68, 81, 60, 72, 65, 78],
-          borderColor: "#4c669f",
-          borderWidth: 2,
-          fill: false,
-          tension: 0.4
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: {
-            ticks: { color: "#333" }
-          },
-          y: {
-            ticks: { color: "#333" }
+    function getUserReadings() {
+      const all = JSON.parse(localStorage.getItem("meterReadings")) || {};
+      return all[email] || [];
+    }
+
+    function filterBy(range) {
+      const now = new Date();
+      let from;
+
+      if (range === "week") from = new Date(now.setDate(now.getDate() - 7));
+      else if (range === "month") from = new Date(now.setMonth(now.getMonth() - 1));
+      else from = new Date(now.setFullYear(now.getFullYear() - 1));
+
+      const readings = getUserReadings().filter(reading => {
+        const parts = reading.date.split(" to ");
+        const toDate = new Date(parts[1]);
+        return toDate >= from;
+      });
+
+      updateDashboard(readings);
+    }
+
+    function updateDashboard(readings) {
+      const totalUsage = readings.reduce((acc, r) => acc + (parseFloat(r.reading) || 0), 0);
+      const totalCost = readings.reduce((acc, r) => acc + (parseFloat(r.cost) || 0), 0);
+      const carbon = (totalUsage * 0.0005).toFixed(2); // basic CO2 factor
+
+      const efficiency = Math.max(100 - (totalUsage / 10), 0).toFixed(0); // Arbitrary scale
+      const savings = (totalUsage * 0.12).toFixed(2); // Assume base cost reduction of $0.12 per kWh
+
+      document.getElementById("totalUsage").textContent = `${totalUsage.toFixed(2)} kWh`;
+      document.getElementById("carbonFootprint").textContent = `${carbon} tons`;
+      document.getElementById("efficiencyScore").textContent = efficiency;
+      document.getElementById("costSavings").textContent = `$${savings}`;
+
+      document.getElementById("usageTrend").textContent = totalUsage > 200 ? "-1.5%" : "+2.3%";
+      document.getElementById("usageTrend").className = totalUsage > 200 ? "negative" : "positive";
+      document.getElementById("savingsTrend").textContent = totalUsage > 200 ? "-3.2%" : "+5.0%";
+      document.getElementById("savingsTrend").className = totalUsage > 200 ? "negative" : "positive";
+
+      const labels = readings.map(r => r.date);
+      const data = readings.map(r => parseFloat(r.reading));
+
+      if (chart) chart.destroy();
+      const ctx = document.getElementById("energyChart").getContext("2d");
+      chart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels,
+          datasets: [{
+            label: "Energy Consumption (kWh)",
+            data,
+            borderColor: "#4c669f",
+            borderWidth: 2,
+            fill: false,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              ticks: { color: "#333" }
+            },
+            y: {
+              ticks: { color: "#333" }
+            }
           }
         }
-      }
-    });
+      });
+    }
+
+    // Initial display with "week" filter
+    window.onload = () => filterBy("week");
   </script>
 </body>
 </html>

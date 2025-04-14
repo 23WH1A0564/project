@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #73cdb6; /* Light green background */
+            background-color: #c9f4e9; /* Light green background */
             color: white;
             margin: 0;
             padding: 0;
@@ -52,7 +52,7 @@
         }
         /* New class for login button */
         .nav a.login {
-            background-color: #5f8f81; /* Light green color */
+            background-color: #cbede3; /* Light green color */
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
@@ -80,7 +80,7 @@
             color: black;
         }
         button {
-            background: #27276d;
+            background: #6b6b9b;
             color: white;
             font-size: 16px;
             cursor: pointer;
@@ -143,6 +143,40 @@
             font-size: 32px;
             margin-bottom: 20px;
         }
+
+        /* Edit and delete buttons style */
+        .history-item {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        .history-item .edit-btn, .history-item .delete-btn {
+            font-size: 0.8em;
+            padding: 5px 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        .history-item .edit-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+        }
+
+        .history-item .delete-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 3px;
+        }
+
+        .history-item .button-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -190,9 +224,24 @@
     </div>
 
     <script>
-        let readings = [];
-        let chart; 
-
+        let chart;
+        let loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+        let userEmail = loggedInUser?.email;
+    
+        // Function to get user readings from localStorage by their email
+        function getUserReadings() {
+            const allReadings = JSON.parse(localStorage.getItem('meterReadings')) || {};
+            return allReadings[userEmail] || [];
+        }
+    
+        // Function to save user readings to localStorage
+        function saveUserReadings(readings) {
+            const allReadings = JSON.parse(localStorage.getItem('meterReadings')) || {};
+            allReadings[userEmail] = readings;
+            localStorage.setItem('meterReadings', JSON.stringify(allReadings));
+        }
+    
+        // Function to add a new reading
         function addReading() {
             const readingInput = document.getElementById('readingInput').value;
             const rateInput = document.getElementById('rateInput').value;
@@ -201,78 +250,127 @@
             const timeFrom = document.getElementById('timeFrom').value;
             const dateTo = document.getElementById('dateTo').value;
             const timeTo = document.getElementById('timeTo').value;
-
+    
             if (!readingInput || !rateInput || !dateFrom || !timeFrom || !dateTo || !timeTo) {
-                alert('Please fill all the fields, including date and time!');
+                alert('Please fill all the fields!');
                 return;
             }
-
-            let displayDate = `${dateFrom} ${timeFrom} to ${dateTo} ${timeTo}`;
-
+    
+            const displayDate = `${dateFrom} ${timeFrom} to ${dateTo} ${timeTo}`;
             const cost = (parseFloat(readingInput) * parseFloat(rateInput)).toFixed(2);
-
+    
             const newReading = {
-                date: displayDate,
-                reading: parseFloat(readingInput),
-                rate: parseFloat(rateInput),
-                cost: cost,
-                notes: noteInput || 'No notes'
-            };
+  date: `${dateFrom} ${timeFrom} to ${dateTo} ${timeTo}`,
+  reading: parseFloat(readingInput),
+  rate: parseFloat(rateInput),
+  cost: (parseFloat(readingInput) * parseFloat(rateInput)).toFixed(2),
+  notes: noteInput || 'No notes'
+};
 
+    
+            let readings = getUserReadings();
             readings.push(newReading);
+            saveUserReadings(readings);
+    
             updateHistory();
             updateChart();
+    
+            // Clear inputs after submission
+            document.getElementById('readingInput').value = '';
+            document.getElementById('rateInput').value = '';
+            document.getElementById('noteInput').value = '';
+            document.getElementById('dateFrom').value = '';
+            document.getElementById('timeFrom').value = '';
+            document.getElementById('dateTo').value = '';
+            document.getElementById('timeTo').value = '';
         }
-
+    
+        // Function to update the history list and show edit/delete buttons
         function updateHistory() {
             const historyList = document.getElementById('historyList');
+            const readings = getUserReadings();
             historyList.innerHTML = '';
-
+    
             if (readings.length === 0) {
                 historyList.innerHTML = 'No readings added yet.';
                 return;
             }
-            readings.slice().reverse().forEach((reading) => {
+    
+            readings.slice().reverse().forEach((reading, index) => {
                 const listItem = document.createElement('li');
-                listItem.innerHTML = `<strong>${reading.date}</strong>: ${reading.reading} kWh at ₹${reading.rate}/kWh - Total: ₹${reading.cost} - ${reading.notes}`;
+                listItem.classList.add('history-item');
+                listItem.innerHTML = `
+                    <strong>${reading.date}</strong>: ${reading.reading} kWh at ₹${reading.rate}/kWh - Total: ₹${reading.cost} - ${reading.notes}
+                    <div class="button-container">
+                        <button class="edit-btn" onclick="editReading(${index})">
+                            <i class="fas fa-pencil-alt"></i> Edit Reading
+                        </button>
+                        <button class="delete-btn" onclick="deleteReading(${index})">
+                            <i class="fas fa-trash-alt"></i> Delete Reading
+                        </button>
+                    </div>
+                `;
                 historyList.appendChild(listItem);
             });
         }
-
+    
+        // Function to edit a reading
+        function editReading(index) {
+            const readings = getUserReadings();
+            const reading = readings[index];
+            document.getElementById('readingInput').value = reading.reading;
+            document.getElementById('rateInput').value = reading.rate;
+            document.getElementById('noteInput').value = reading.notes;
+        }
+    
+        // Function to delete a reading
+        function deleteReading(index) {
+            let readings = getUserReadings();
+            readings.splice(index, 1);
+            saveUserReadings(readings);
+            updateHistory();
+            updateChart();
+        }
+    
+        // Function to update chart
         function updateChart() {
+            const readings = getUserReadings();
+            if (chart) chart.destroy();
+    
+            const labels = readings.map(reading => reading.date);
+            const data = readings.map(reading => reading.reading);
+    
             const ctx = document.getElementById('usageChart').getContext('2d');
-
-            if (chart) {
-                chart.destroy();
-            }
-
             chart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: readings.map(r => r.date),
+                    labels: labels,
                     datasets: [{
-                        label: 'Meter Readings (kWh)',
-                        data: readings.map(r => r.reading),
-                        borderColor: '#26a69a',
-                        backgroundColor: 'rgba(38, 166, 154, 0.2)',
-                        fill: true,
-                        tension: 0.4,
-                        pointRadius: 5,
-                        pointBackgroundColor: '#00796b'
+                        label: 'Meter Reading (kWh)',
+                        data: data,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderWidth: 2
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            ticks: {
+                                autoSkip: true,
+                                maxTicksLimit: 6
+                            }
+                        }
+                    }
                 }
             });
         }
-
-        window.onload = function () {
-            updateHistory();
-            updateChart();
-        };
+    
+        // Initial setup
+        updateHistory();
+        updateChart();
     </script>
-
 </body>
 </html>

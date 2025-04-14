@@ -153,30 +153,15 @@
       <label for="password">Password:</label>
       <input type="password" id="password" required>
 
+      <label for="confirm-password">Confirm Password:</label>
+      <input type="password" id="confirm-password" required>
+
       <button type="submit">Sign Up</button>
     </form>
     <p>Already have an account? <a href="login.html">Log In</a></p>
   </div>
 
-  <!-- Sign-Up Logic -->
-  <script>
-    document.getElementById('signup-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      const user = {
-        name: name,
-        email: email,
-        password: password
-      };
-
-      localStorage.setItem(email, JSON.stringify(user));
-      alert('Account created successfully!');
-      window.location.href = 'login.html'; // Redirect to login after sign-up
-    });
-  </script>
+  <!-- Link to external JS file -->
+  <script src="signin.js"></script>
 </body>
 </html>
