@@ -125,7 +125,7 @@
   </div>
 
   <script>
-    const userName = "Amulya";
+    const userName = "User";
     const readings = JSON.parse(localStorage.getItem('meterReadings')) || {};
     const userEmail = JSON.parse(localStorage.getItem('loggedInUser'))?.email;
     const userReadings = readings[userEmail] || [];
@@ -217,7 +217,7 @@
     }
 
     function logout() {
-      window.location.href ='startpage.html';
+      window.location.href ='index.html';
     }
   </script>
 </body>
